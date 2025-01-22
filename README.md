@@ -1,5 +1,10 @@
 # Illusion
 
+## 文件说明
+- illusion.js : 1.0
+- IllusionDebug.js : 针对 chatgpt.com `STATUS_BREAKPOINT` 错误修改（等待反馈）
+- IllusionDatalist.js : 表单输入 + 搜索框匹配 版
+
 ## 功能简介
 - 快速输入 Prompt
     - 示例场景：Prompt 复用率高，但因为简短、难以形成框架等原因，尚不足以写入Project
