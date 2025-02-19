@@ -1,9 +1,7 @@
 # Illusion
 
 ## 文件说明
-- illusion.js : 1.0
-- IllusionDebug.js : 针对 chatgpt.com `STATUS_BREAKPOINT` 错误修改（等待反馈）
-- IllusionDatalist.js : 表单输入 + 搜索框匹配 版
+-
 
 ## 功能简介
 - 快速输入 Prompt
@@ -17,10 +15,10 @@
 - Claude, ChatGPT, DeepSeek 支持浅色主题
 - Google AI Studio 支持深色主题
   
-![claude.ai](https://github.com/cattail-mutt/Illusion/blob/main/images/71da242a73204337baa9c82dc2bea45b4ad332fa.png)
-![chatgpt.com](https://github.com/cattail-mutt/Illusion/blob/main/images/a770480b821c54776e2c4d786ac202aae3d68c7d.png)
-![aistudio.google.com](https://github.com/cattail-mutt/Illusion/blob/main/images/a61822846d56201f6f38ce09fc020a45ff5fc8a2.png)
-![chat.deepseek.com](https://github.com/cattail-mutt/Illusion/blob/main/images/6d34b11ceb8d6562be6b33806e85742fe30e192c.png)
+![claude.ai](https://github.com/cattail-mutt/Illusion/blob/main/resources/images/claude.png)
+![chatgpt.com](https://github.com/cattail-mutt/Illusion/blob/main/resources/images/chatgpt.png)
+![aistudio.google.com](https://github.com/cattail-mutt/Illusion/blob/main/resources/images/aistudio.png)
+![chat.deepseek.com](https://github.com/cattail-mutt/Illusion/blob/main/resources/images/deepseek.png)
 
 ## 预置 Prompt 及来源
 > https://linux.do/t/topic/267573/24
