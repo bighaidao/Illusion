@@ -1,23 +1,10 @@
-:root {
-    /* 这些变量将在 JS 中动态设置 */
-    --illusion-button-size: 48px;
-    --illusion-button-bg: #fff;
-    --illusion-border: rgba(0,0,0,0.1);
-    --illusion-button-hover: #f7f7f8;
-    --illusion-panel-bg: #fff;
-    --illusion-text: #000;
-    --illusion-panel-buttonBg: #f7f7f8;
-    --illusion-panel-buttonHover: #ece8f1;
-    --illusion-secondary: #f7f7f8;
-}
-
 .illusion-button {
     position: fixed;
-    width: var(--illusion-button-size);
-    height: var(--illusion-button-size);
+    width: var(--button-size);
+    height: var(--button-size);
     border-radius: 12px;
-    background: var(--illusion-button-bg);
-    border: 1px solid var(--illusion-border);
+    background: var(--button-bg);
+    border: 1px solid var(--border-color);
     cursor: move;
     display: flex;
     align-items: center;
@@ -36,11 +23,11 @@
 
 .illusion-button:hover {
     opacity: 1;
-    background: var(--illusion-button-hover);
+    background: var(--button-hover);
 }
 
 .illusion-button.dragging:active {
-    background: var(--illusion-button-hover);
+    background: var(--button-hover);
     box-shadow: 0 6px 12px rgba(0,0,0,0.4);
 }
 
@@ -50,15 +37,15 @@
     top: 50%;
     transform: translateY(-50%);
     width: 320px;
-    background: var(--illusion-panel-bg);
+    background: var(--panel-bg);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     display: none;
     z-index: 10000;
     font-family: system-ui, -apple-system, sans-serif;
     padding: 16px;
-    color: var(--illusion-text);
-    border: 1px solid var(--illusion-border);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .illusion-panel.visible {
@@ -69,7 +56,7 @@
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 16px;
-    color: var(--illusion-text);
+    color: var(--text-color);
 }
 
 .button-group {
@@ -82,16 +69,16 @@
     padding: 8px 16px;
     border: none;
     border-radius: 6px;
-    background: var(--illusion-panel-buttonBg);
-    color: var(--illusion-text);
+    background: var(--panel-button-bg);
+    color: var(--text-color);
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.2s;
-    border: 1px solid var(--illusion-border);
+    border: 1px solid var(--border-color);
 }
 
 .panel-button:hover {
-    background: var(--illusion-panel-buttonHover);
+    background: var(--panel-button-hover);
 }
 
 .modal-overlay {
@@ -110,7 +97,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: var(--illusion-panel-bg);
+    background: var(--panel-bg);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     display: none;
@@ -119,8 +106,8 @@
     max-width: 90%;
     max-height: 90vh;
     overflow-y: auto;
-    border: 1px solid var(--illusion-border);
-    color: var(--illusion-text);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
 }
 
 .modal.visible,
@@ -130,7 +117,7 @@
 
 .modal-header {
     padding: 16px;
-    border-bottom: 1px solid var(--illusion-border);
+    border-bottom: 1px solid var(--border-color);
     font-weight: 600;
 }
 
@@ -140,7 +127,7 @@
 
 .modal-footer {
     padding: 16px;
-    border-top: 1px solid var(--illusion-border);
+    border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: flex-end;
     gap: 8px;
@@ -153,18 +140,18 @@
 .form-label {
     display: block;
     margin-bottom: 8px;
-    color: var(--illusion-text);
+    color: var(--text-color);
 }
 
 .form-input,
 .form-textarea {
     width: 100%;
     padding: 8px;
-    border: 1px solid var(--illusion-border);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     margin-bottom: 8px;
-    background: var(--illusion-secondary);
-    color: var(--illusion-text);
+    background: var(--secondary-bg);
+    color: var(--text-color);
 }
 
 .form-textarea {
@@ -177,8 +164,8 @@
 
 .form-textarea:focus {
     outline: none;
-    border-color: var(--illusion-text);
-    box-shadow: 0 0 0 2px var(--illusion-border);
+    border-color: var(--text-color);
+    box-shadow: 0 0 0 2px var(--border-color);
 }
 
 .input-group {
@@ -189,21 +176,21 @@
 .prompt-input {
     width: 100%;
     padding: 8px;
-    border: 1px solid var(--illusion-border);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
-    background: var(--illusion-secondary);
-    color: var(--illusion-text);
+    background: var(--secondary-bg);
+    color: var(--text-color);
     font-size: 14px;
 }
 
 .prompt-input:focus {
     outline: none;
-    border-color: var(--illusion-text);
-    box-shadow: 0 0 0 2px var(--illusion-border);
+    border-color: var(--text-color);
+    box-shadow: 0 0 0 2px var(--border-color);
 }
 
 datalist {
     width: 100%;
-    background: var(--illusion-secondary);
-    color: var(--illusion-text);
+    background: var(--secondary-bg);
+    color: var(--text-color);
 }
