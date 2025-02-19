@@ -6,5 +6,5 @@
     ".json": "```json:xxx.json\n\n```",
     "请翻译": "请翻译：\n<toTranslate>\n{{需要翻译的文本}}\n\n</toTranslate>",
     "逐步思考[简]": "\nPlease think step-by-step.",
-    "逐步思考[标签]": "\n在输出之前，请在<thinking>中逐步思考。首先，思考    ，然后思考    ，之后思考    。最后，请在<output>中输出    。",
+    "逐步思考[标签]": "\n在输出之前，请在<thinking>中逐步思考。首先，思考    ，然后思考    ，之后思考    。最后，请在<output>中输出    。"
 }
