@@ -49,7 +49,7 @@
     },
     "deepseek": {
         "primary": "rgb(249, 251, 255)",
-        "secondary": "rgb(249, 251, 255)", 
+        "secondary": "rgb(249, 251, 255)",
         "hover": "rgb(249, 251, 255)",
         "text": "rgb(50, 50, 50)",
         "border": "rgba(77, 107, 254, 0.2)",
