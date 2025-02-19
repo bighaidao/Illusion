@@ -1,0 +1,209 @@
+:root {
+    /* 这些变量将在 JS 中动态设置 */
+    --illusion-button-size: 48px;
+    --illusion-button-bg: #fff;
+    --illusion-border: rgba(0,0,0,0.1);
+    --illusion-button-hover: #f7f7f8;
+    --illusion-panel-bg: #fff;
+    --illusion-text: #000;
+    --illusion-panel-buttonBg: #f7f7f8;
+    --illusion-panel-buttonHover: #ece8f1;
+    --illusion-secondary: #f7f7f8;
+}
+
+.illusion-button {
+    position: fixed;
+    width: var(--illusion-button-size);
+    height: var(--illusion-button-size);
+    border-radius: 12px;
+    background: var(--illusion-button-bg);
+    border: 1px solid var(--illusion-border);
+    cursor: move;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 10000;
+    transition: opacity 0.3s;
+    user-select: none;
+    touch-action: none;
+    transition: left 0.1s linear, top 0.1s linear;
+}
+
+.illusion-button.docked {
+    opacity: 0.5;
+}
+
+.illusion-button:hover {
+    opacity: 1;
+    background: var(--illusion-button-hover);
+}
+
+.illusion-button.dragging:active {
+    background: var(--illusion-button-hover);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.illusion-panel {
+    position: fixed;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    background: var(--illusion-panel-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 10000;
+    font-family: system-ui, -apple-system, sans-serif;
+    padding: 16px;
+    color: var(--illusion-text);
+    border: 1px solid var(--illusion-border);
+}
+
+.illusion-panel.visible {
+    display: block;
+}
+
+.panel-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--illusion-text);
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.panel-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: var(--illusion-panel-buttonBg);
+    color: var(--illusion-text);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: 1px solid var(--illusion-border);
+}
+
+.panel-button:hover {
+    background: var(--illusion-panel-buttonHover);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    z-index: 10000;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--illusion-panel-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 10001;
+    min-width: 400px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid var(--illusion-border);
+    color: var(--illusion-text);
+}
+
+.modal.visible,
+.modal-overlay.visible {
+    display: block;
+}
+
+.modal-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--illusion-border);
+    font-weight: 600;
+}
+
+.modal-content {
+    padding: 16px;
+}
+
+.modal-footer {
+    padding: 16px;
+    border-top: 1px solid var(--illusion-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--illusion-text);
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--illusion-border);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    background: var(--illusion-secondary);
+    color: var(--illusion-text);
+}
+
+.form-textarea {
+    min-height: 200px;
+    resize: vertical;
+    font-family: monospace;
+    line-height: 1.5;
+    padding: 12px;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--illusion-text);
+    box-shadow: 0 0 0 2px var(--illusion-border);
+}
+
+.input-group {
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.prompt-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--illusion-border);
+    border-radius: 6px;
+    background: var(--illusion-secondary);
+    color: var(--illusion-text);
+    font-size: 14px;
+}
+
+.prompt-input:focus {
+    outline: none;
+    border-color: var(--illusion-text);
+    box-shadow: 0 0 0 2px var(--illusion-border);
+}
+
+datalist {
+    width: 100%;
+    background: var(--illusion-secondary);
+    color: var(--illusion-text);
+}
