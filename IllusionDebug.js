@@ -3,8 +3,9 @@
 // @icon         https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/icons/illusion.png
 // @namespace    LINUX_DO
 // @version      debug
-// @description  你的 Prompts 储存库，支持 Gemini, Claude, ChatGPT 和 Deepseek。
+// @description  幻觉（Illusion）是一个精简的跨平台 Prompts 管理工具，支持在以下 AI 平台使用：Google AI Studio, OpenAI ChatGPT, Anthropic Claude 和 DeepSeek Chat。
 // @author       Mukai
+// @license      MIT
 // @match        https://aistudio.google.com/*
 // @match        https://chatgpt.com/*
 // @match        https://claude.ai/*
