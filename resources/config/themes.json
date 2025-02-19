@@ -1,0 +1,66 @@
+{
+    "claude": {
+        "primary": "rgb(217, 119, 87)",
+        "secondary": "rgb(230, 228, 219)",
+        "hover": "rgb(220, 218, 209)",
+        "text": "rgb(83, 81, 70)",
+        "border": "rgba(217, 119, 87, 0.2)",
+        "button": {
+            "bg": "rgb(240, 238, 229)",
+            "hover": "rgb(230, 228, 219)"
+        },
+        "panel": {
+            "bg": "rgb(240, 238, 229)",
+            "buttonBg": "rgb(230, 228, 219)",
+            "buttonHover": "rgb(220, 218, 209)"
+        }
+    },
+    "chatgpt": {
+        "primary": "rgb(255, 255, 255)",
+        "secondary": "rgb(247, 247, 248)",
+        "hover": "rgb(236, 236, 241)",
+        "text": "rgb(0, 0, 0)",
+        "border": "rgba(0, 0, 0, 0.1)",
+        "button": {
+            "bg": "rgb(255, 255, 255)",
+            "hover": "rgb(247, 247, 248)"
+        },
+        "panel": {
+            "bg": "rgb(255, 255, 255)",
+            "buttonBg": "rgb(247, 247, 248)",
+            "buttonHover": "rgb(236, 236, 241)"
+        }
+    },
+    "gemini": {
+        "primary": "rgb(26, 28, 30)",
+        "secondary": "rgb(32, 34, 37)",
+        "hover": "rgb(45, 47, 50)",
+        "text": "rgb(198, 198, 201)",
+        "border": "rgba(255, 255, 255, 0.1)",
+        "button": {
+            "bg": "rgb(26, 28, 30)",
+            "hover": "rgb(36, 38, 40)"
+        },
+        "panel": {
+            "bg": "rgb(26, 28, 30)",
+            "buttonBg": "rgb(32, 34, 37)",
+            "buttonHover": "rgb(45, 47, 50)"
+        }
+    },
+    "deepseek": {
+        "primary": "rgb(249, 251, 255)",
+        "secondary": "rgb(249, 251, 255)", 
+        "hover": "rgb(249, 251, 255)",
+        "text": "rgb(50, 50, 50)",
+        "border": "rgba(77, 107, 254, 0.2)",
+        "button": {
+            "bg": "rgb(219, 234, 254)",
+            "hover": "rgb(249, 251, 255)"
+        },
+        "panel": {
+            "bg": "rgb(255, 255, 255)",
+            "buttonBg": "rgb(249, 251, 255)",
+            "buttonHover": "rgb(77, 107, 254)"
+        }
+    }
+}
