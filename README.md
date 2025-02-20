@@ -7,13 +7,21 @@
 
 2. **缺少自定义指令的对话窗口**
 > 我使用的是 DeepSeek Chat 网页，这儿没有 Project, 常用的提示词的利用有些不方便。
+>
 > 又或者像 DeepSeek 官方所推荐的，我想用 提示词模板 + 模板变量 构成的复杂提示词来获得更加令人满意的响应。
 
 3. **替代 ChatGPT Project Instructions**
 > 我有经常重复使用的 Prompt 和 ChatGPT 订阅。ChatGPT Project 非推理模型对项目的指令服从性很差。
+>
 > 暂且不谈它的检索效果，光是遗忘指令这一条，就让它的整体表现远不如 Claude Project。所以，我正在寻找一个替代的解决方案。
 
 ## 功能概述
+- Google AI Studio
+- OpenAI ChatGPT
+- Anthropic Claude
+- DeepSeek Chat
+
+主要功能包括：
 1. **Prompts 管理**
    - 创建、编辑、删除自定义 Prompts
    - 快速查找和使用（输入）已保存的 Prompts
@@ -63,17 +71,15 @@
 
 ## 常见问题
 ### 1. 脚本不工作怎么办？
-   - 检查是否安装了用户脚本管理器
-   - 确认脚本已启用
-   - 刷新页面后重试
+   - 检查是否安装了用户脚本管理器，确认脚本已启用，刷新页面后重试
+   - 右键 → 检查 → 控制台 / Console 寻找 Illusion 相关的日志和错误信息，然后前往提交[issue](https://github.com/cattail-mutt/Illusion/issues)
 
 ### 2. Prompts 数据会丢失吗？
    - 数据存储在本地，除非本地存储空间已满，否则不会自动清除
    - 如果您的 prompts 库数量庞大或是投入了大量心血，建议不定期导出备份
 
 ### 3. 如何反馈问题或建议？
-   - 通过 Greasy Fork 的反馈页面
-   - 提交 [issue](https://github.com/cattail-mutt/Illusion/issues)
+   - 提交[issue](https://github.com/cattail-mutt/Illusion/issues)
 
 ## 界面预览
 - 适配 Claude, ChatGPT, DeepSeek 的浅色主题
