@@ -14,13 +14,6 @@
 > 暂且不谈它的检索效果，光是遗忘指令这一条，就让它的整体表现远不如 Claude Project。所以，我正在寻找一个替代的解决方案。
 
 ## 功能概述
-幻觉（Illusion）是一个精简的跨平台 Prompts 管理工具，支持在以下平台使用：
-- Google AI Studio
-- OpenAI ChatGPT
-- Anthropic Claude
-- DeepSeek Chat
-
-主要功能包括：
 1. **Prompts 管理**
    - 创建、编辑、删除自定义 Prompts
    - 快速查找和使用（输入）已保存的 Prompts
