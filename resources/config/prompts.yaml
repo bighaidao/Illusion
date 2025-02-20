@@ -28,6 +28,7 @@ javascript: |
     ```
 
 translate: |
+  请翻译：
   <toTranslate>
   {{需要翻译的文本}}
   
