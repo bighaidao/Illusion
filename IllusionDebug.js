@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Illusion Debug
 // @icon         https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/icons/illusion.png
-// @namespace    LINUX_DO
+// @namespace    https://github.com/cattail-mutt
 // @version      debug
 // @description  幻觉（Illusion）是一个精简的跨平台 Prompts 管理工具，支持在以下 AI 平台使用：Google AI Studio, OpenAI ChatGPT, Anthropic Claude 和 DeepSeek Chat。
 // @author       Mukai
@@ -17,6 +17,7 @@
 // @resource     THEMES https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/config/themes.json
 // @resource     CSS https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/styles/illusion.css
 // @require      https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js
+// @homepage     https://greasyfork.org/zh-CN/scripts/527451-%E5%B9%BB%E8%A7%89-illusion
 // ==/UserScript==
 
 (function() {
@@ -39,11 +40,11 @@
         trace: (...args) => debug.enabled && console.trace('[Illusion]追踪:', ...args)
     };
 
+    debug.log('PROMPTS文件内容:', GM_getResourceText('PROMPTS'));
     const initialPrompts = jsyaml.load(GM_getResourceText('PROMPTS'));
-    const THEMECONFIG = GM_getResourceText('THEMES');
-    debug.log('[Illusion]日志: PROMPTS解析结果:', initialPrompts);
-    debug.log('[Illusion]日志: THEMES解析结果:', THEMECONFIG);
-    let themeConfigs = JSON.parse(THEMECONFIG);
+    const THEMECONFIG = JSON.parse(GM_getResourceText('THEMES'));
+    debug.log('PROMPTS解析结果:', initialPrompts);
+    debug.log('THEMES解析结果:', THEMECONFIG);
 
     function dispatchEvents(element, events) {
         events.forEach(eventName => {
@@ -120,6 +121,10 @@
         initTimeout: 10000,
         eventDelay: 50,
         eventTimeout: 1000,
+        sync: {
+            enabled: true,  // 是否与仓库中的 prompts.yaml 自动同步
+            blacklist: ['undesired_prompt,e.g. dev', 'undesired_prompt,e.g. graphviz']  // 同步黑名单[键名]，这些键名对应的提示词将不会被同步
+        },
         sites: {
             CHATGPT: {
                 id: 'chatgpt',
@@ -130,6 +135,7 @@
             },
             CLAUDE: {
                 id: 'claude',
+                // 由于 claude.ai 的 CSP 限制，用 svg 塞入图标
                 icon: `<svg xmlns="http://www.w3.org/2000/svg" style="flex:none;line-height:1" viewBox="0 0 24 24"><title>Claude</title><path d="M4.709 15.955l4.72-2.647.08-.23-.08-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z" fill="#D97757" fill-rule="nonzero"/></svg>`,
                 buttonSize: '48px',
                 selector: 'div.ProseMirror[contenteditable=true]',
@@ -160,7 +166,7 @@
 
     function applyThemeVariables() {
         const currentSite = getCurrentSite();
-        const theme = themeConfigs[currentSite];
+        const theme = THEMECONFIG[currentSite];
         const config = Object.values(CONFIG.sites).find(s => s.id === currentSite);
         const root = document.documentElement;
         root.style.setProperty('--button-size', config.buttonSize);
@@ -174,14 +180,12 @@
         root.style.setProperty('--secondary-bg', theme.secondary);
     }
 
-    // 匹配输入框
     function waitForElement(selector, maxTimeout = CONFIG.initTimeout) {
         return new Promise((resolve, reject) => {
             const element = document.querySelector(selector);
             if(element) {
                 return resolve(element);
             }
-            
             let timeout;
             const observer = new MutationObserver(() => {
                 const el = document.querySelector(selector);
@@ -191,12 +195,10 @@
                     resolve(el);
                 }
             });
-            
             timeout = setTimeout(() => {
                 observer.disconnect();
-                reject(new Error(`Timeout waiting for ${selector}`));
+                reject(new Error(`超时：使用选择器 ${selector} 寻找元素`));
             }, maxTimeout);
-            
             observer.observe(document.body, {
                 childList: true,
                 subtree: true
@@ -238,45 +240,79 @@
         return element;
     }
 
-    // 载入 GM_Value 中存储的提示词或预置提示词
+    function filterPromptsByBlacklist(prompts) {
+        const blacklist = new Set(CONFIG.sync.blacklist);
+        const filteredPrompts = {};
+        for (const [id, content] of Object.entries(prompts)) {
+            if (!blacklist.has(id)) {
+                filteredPrompts[id] = content;
+            } else {
+                debug.log(`提示词 "${id}" 在黑名单中，已过滤`);
+            }
+        }
+        return filteredPrompts;
+    }
+
+    function syncPrompts(storedPrompts, initialPrompts) {
+        if (!CONFIG.sync.enabled) {
+            debug.log('提示词同步功能已禁用');
+            return storedPrompts;
+        }
+        debug.log('提示词库同步中...');
+        const filteredInitialPrompts = filterPromptsByBlacklist(initialPrompts);
+        let hasNewPrompts = false;
+        const syncedPrompts = { ...storedPrompts };
+        for (const [id, content] of Object.entries(filteredInitialPrompts)) {
+            if (!syncedPrompts[id]) {
+                debug.log(`发现新提示词: "${id}"`);
+                syncedPrompts[id] = content;
+                hasNewPrompts = true;
+            }
+        }
+        if (hasNewPrompts) {
+            debug.log('同步完成，发现并添加了新的提示词');
+            GM_setValue('prompts', syncedPrompts);
+        } else {
+            debug.log('同步完成，没有发现新的提示词');
+        }
+        return syncedPrompts;
+    }
+
     function loadPrompts() {
+        debug.log('正在载入提示词...');
         const storedPrompts = GM_getValue('prompts');
         if (!storedPrompts) {
-            savedPrompts = initialPrompts;
+            const filteredPrompts = filterPromptsByBlacklist(initialPrompts);
+            savedPrompts = filteredPrompts;
+            debug.log('未发现 GM 存储中的提示词，将使用初始化时加载的默认提示词:', savedPrompts);
             GM_setValue('prompts', savedPrompts);
         } else {
-            savedPrompts = storedPrompts;
+            debug.log('发现 GM 存储中已有提示词如下', storedPrompts);
+            savedPrompts = syncPrompts(storedPrompts, initialPrompts);
         }
         return savedPrompts;
     }
 
-    // 保存新提示词、更新列表
     function saveNewPrompt(id, content) {
         savedPrompts[id] = content;
         GM_setValue('prompts', savedPrompts);
         updateDatalist();
-        debug.log('New prompt saved:', id);
+        debug.log('新的提示词已保存:', id);
     }
 
-    // 网页 Prompt 设置（含重试机制）
     async function setPromptWithRetry(site, prompt, maxRetries = CONFIG.maxRetries) {
         return new Promise(async (resolve, reject) => {
             let attempts = 0;
-            
             const trySetPrompt = async () => {
                 try {
                     const config = Object.values(CONFIG.sites).find(s => s.id === site);
                     if(!config || !config.setPrompt) {
-                        return reject(new Error(`No prompt setter configured for site: ${site}`));
+                        return reject(new Error(`缺少当前站点对应的文本编辑器配置: ${site}`));
                     }
-                    
-                    // 获取最新的编辑器元素
                     const editor = document.querySelector(config.selector);
                     if(!editor) {
-                        throw new Error('Editor element not found');
+                        throw new Error('在页面上没有找到配置所指定的文本编辑器');
                     }
-                    
-                    // 传入编辑器元素和prompt内容
                     await config.setPrompt(editor, prompt);
                     resolve(true);
                 } catch (err) {
@@ -288,12 +324,10 @@
                     }
                 }
             };
-    
             trySetPrompt();
         });
     }
-    
-    // UI创建
+
     function initializeUI() {
         loadExternalCSS();
         applyThemeVariables();
@@ -310,10 +344,8 @@
             'data-tooltip-position': 'left',
             'aria-label': 'Illusion'
         });
-        
         const currentSite = getCurrentSite();
         const config = Object.values(CONFIG.sites).find(s => s.id === currentSite);
-        
         if(config.icon.startsWith('http')) {
             const img = createElement('img', {
                 src: config.icon,
@@ -333,11 +365,9 @@
                 svg.style.pointerEvents = 'none';
             }
         }
-        
         document.body.appendChild(button);
         makeDraggable(button);
-        
-        debug.log('Button created');
+        debug.log('按钮已创建');
         return button;
     }
 
@@ -345,80 +375,70 @@
         const panel = createElement('div', {
             className: 'illusion-panel'
         });
-        
         const title = createElement('div', {
             className: 'panel-title',
             textContent: 'Illusion'
         });
         panel.appendChild(title);
-        
         const inputGroup = createElement('div', {
             className: 'input-group'
         });
-        
         const input = createElement('input', {
             className: 'prompt-input',
             type: 'text',
             list: 'prompt-options',
             placeholder: '查找 Prompt'
         });
-        
         const datalist = createElement('datalist', {
             id: 'prompt-options'
         });
-        
         Object.keys(savedPrompts).forEach(id => {
             const option = createElement('option', {
                 value: id
             });
             datalist.appendChild(option);
         });
-        
         inputGroup.appendChild(input);
         inputGroup.appendChild(datalist);
         panel.appendChild(inputGroup);
-        
         const buttonGroup = createElement('div', {
             className: 'button-group'
         });
-        
         const newButton = createElement('button', {
             className: 'panel-button',
             textContent: 'New Prompt',
             'data-action': 'new',
             onclick: () => {
-                debug.log('New prompt button clicked');
+                debug.log('已点击 New prompt 按钮');
                 const modal = document.querySelector('.modal');
                 const overlay = document.querySelector('.modal-overlay');
                 if (modal && overlay) {
                     showNewPromptModal(modal, overlay);
                 } else {
-                    debug.error('Modal or overlay elements not found');
+                    debug.error('找不到模态框/遮罩层');
                 }
             }
         });
         buttonGroup.appendChild(newButton);
-        
         const manageButton = createElement('button', {
             className: 'panel-button',
             textContent: 'Manage',
             'data-action': 'manage',
             onclick: () => {
-                debug.log('Manage button clicked');
+                debug.log('已点击 Manage 按钮');
                 const modal = document.querySelector('.modal');
                 const overlay = document.querySelector('.modal-overlay');
                 if (modal && overlay) {
                     showManagePromptsModal(modal, overlay);
                 } else {
-                    debug.error('Modal or overlay elements not found');
+                    debug.error('找不到模态框/遮罩层');
                 }
             }
         });
         buttonGroup.appendChild(manageButton);
         panel.appendChild(buttonGroup);
-        
         document.body.appendChild(panel);
-        debug.log('Panel created');
+        debug.log('配置面板已创建');
         return panel;
     }
 
@@ -427,14 +447,12 @@
             className: 'modal-overlay'
         });
         document.body.appendChild(overlayRef);
-        
         modalRef = createElement('div', {
             className: 'modal',
             role: 'dialog',
             'aria-modal': 'true'
         });
         document.body.appendChild(modalRef);
-        
         return { modal: modalRef, overlay: overlayRef };
     }
 
@@ -445,7 +463,6 @@
                 className: 'panel-button',
                 textContent: config.text,
                 onclick: () => {
-                    // 调用配置中的 function，同时把 modal 和 overlay 传递进去（如果需要）
                     config.onClick && config.onClick(modal, overlay);
                 }
             });
@@ -466,7 +483,6 @@
         overlay.classList.remove('visible');
     }
 
-    // 拖拽功能
     function getEventPosition(e) {
         if (e.touches && e.touches.length) {
             return { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -539,23 +555,17 @@
             });
         }
 
-        // 触摸事件
         button.addEventListener('touchstart', dragStart, { passive: false });
         button.addEventListener('touchend', dragEnd, { passive: false });
         button.addEventListener('touchmove', drag, { passive: false });
-        
-        // 鼠标事件
         button.addEventListener('mousedown', dragStart);
         document.addEventListener('mousemove', drag);
         document.addEventListener('mouseup', dragEnd);
-        
         window.addEventListener('resize', () => {
             if (lastValidX !== undefined && lastValidY !== undefined) {
                 setButtonPosition(lastValidX, lastValidY);
             }
         });
-        
-        // 恢复保存的位置或设置默认初始位置
         const savedPosition = GM_getValue('buttonPosition');
         if (savedPosition) {
             setButtonPosition(savedPosition.x, savedPosition.y);
@@ -567,7 +577,6 @@
         }
     }
 
-    // Modals
     function createModalContainer(title, contentElement, footerElement) {
         const container = createElement('div');
         const header = createElement('div', {
@@ -599,36 +608,28 @@
 
     function createPromptModal({ title, promptId, promptContent, isEditable, onSave, modal, overlay }) {
         const content = createElement('div', { className: 'modal-content' });
-
-        // 创建Prompt ID输入组
         const { group: idGroup, input: idInput } = createFormGroup('Prompt ID', {
             className: 'form-input',
             type: 'text',
             value: promptId || '',
-            placeholder: '输入Prompt的标识名称'
+            placeholder: '为提示词命名'
         });
-        // 如果是编辑状态，则禁用输入框
         if (promptId && !isEditable) {
             idInput.disabled = true;
         }
         content.appendChild(idGroup);
-
-        // 创建Prompt Content输入组
         const { group: contentGroup, input: contentInput } = createFormGroup('Prompt Content', {
             className: 'form-textarea',
             type: 'textarea',
             value: promptContent || '',
-            placeholder: '输入Prompt内容'
+            placeholder: '输入提示词的内容'
         });
+        contentInput.value = promptContent || '';
         content.appendChild(contentGroup);
-
-        // 页脚按钮配置
         const footerButtons = [
             {
                 text: 'Cancel',
-                onClick: (modal, overlay) => {
-                    hideModal(modal, overlay);
-                }
+                onClick: (modal, overlay) => hideModal(modal, overlay)
             },
             {
                 text: promptId ? 'Update' : 'Save',
@@ -657,7 +658,7 @@
                         saveNewPrompt(id, content);
                         hideModal(modal, overlay);
                     } catch (err) {
-                        debug.error('Error saving new prompt:', err);
+                        debug.error('提示词保存失败:', err);
                         alert('保存失败，请重试');
                     }
                 } else {
@@ -669,7 +670,6 @@
         });
     }
     
-    // Editing Modal
     function showEditPromptModal(modal, overlay, id, content) {
         createPromptModal({
             title: 'Prompt Editing',
@@ -694,17 +694,14 @@
 
     function showManagePromptsModal(modal, overlay) {
         const container = createElement('div');
-        
         const header = createElement('div', {
             className: 'modal-header',
             textContent: 'Manage Prompts'
         });
         container.appendChild(header);
-        
         const content = createElement('div', {
             className: 'modal-content'
         });
-        
         Object.entries(savedPrompts).forEach(([id, promptContent]) => {
             const promptGroup = createElement('div', {
                 className: 'form-group',
@@ -716,18 +713,15 @@
                     borderBottom: '1px solid #eee'
                 }
             });
-            
             const promptId = createElement('div', {
                 className: 'form-label',
                 style: { margin: '0', flex: '1' },
                 textContent: id
             });
-            
             const buttonGroup = createElement('div', {
                 className: 'button-group',
                 style: { marginLeft: '16px' }
             });
-            
             const editButton = createElement('button', {
                 className: 'panel-button',
                 textContent: 'Edit',
@@ -735,7 +729,6 @@
                     showEditPromptModal(modal, overlay, id, promptContent);
                 }
             });
-            
             const deleteButton = createElement('button', {
                 className: 'panel-button',
                 textContent: 'Delete',
@@ -748,20 +741,16 @@
                     }
                 }
             });
-            
             buttonGroup.appendChild(editButton);
             buttonGroup.appendChild(deleteButton);
             promptGroup.appendChild(promptId);
             promptGroup.appendChild(buttonGroup);
             content.appendChild(promptGroup);
         });
-        
         container.appendChild(content);
-        
         const footer = createElement('div', {
             className: 'modal-footer'
         });
-        
         const closeButton = createElement('button', {
             className: 'panel-button',
             textContent: 'Close',
@@ -769,24 +758,23 @@
                 hideModal(modal, overlay);
             }
         });
-        
         footer.appendChild(closeButton);
         container.appendChild(footer);
         openModal(modal, overlay, container);
     }
 
-    // Prompt选择器
     function updateDatalist() {
         const datalist = document.getElementById('prompt-options');
         if (!datalist) return;
+        debug.log('最新的提示词列表:', savedPrompts);
         datalist.textContent = '';
         Object.keys(savedPrompts).forEach(id => {
+            debug.log('可用提示词:', id);
             const option = createElement('option', { value: id });
             datalist.appendChild(option);
         });
     }
 
-    // 事件监听
     function setupEventListeners(button, panel, modal, overlay) {
         panel.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -812,7 +800,7 @@
             if (!btn) return;
             
             const action = btn.dataset.action;
-            debug.log('Panel button clicked:', action);
+            debug.log('已点击按钮面板', action);
             
             try {
                 if (action === 'new') {
@@ -821,7 +809,7 @@
                     showManagePromptsModal(modalRef, overlayRef);
                 }
             } catch (error) {
-                debug.error('Error handling button click:', error);
+                debug.error('无效的点击操作或按钮绑定的操作异常', error);
             }
         });
 
@@ -830,21 +818,18 @@
         promptInput.addEventListener('change', async (e) => {
             const selectedValue = e.target.value.trim();
             const promptContent = savedPrompts[selectedValue];
-            
             if (promptContent) {
-                debug.log('Setting prompt:', selectedValue);
+                debug.log('正在输入提示词内容:', selectedValue);
                 try {
                     const site = getCurrentSite();
                     const success = await setPromptWithRetry(site, promptContent);
                     if (success) {
-                        debug.log('Set prompt: Done');
+                        debug.log('提示词已输入');
                     } else {
-                        debug.error('Set prompt: Failed');
-                        alert('Failed to set prompt. Please try again.');
+                        alert('提示词输入失败，请重试');
                     }
                 } catch(err) {
-                    debug.error('Error setting prompt:', err);
-                    alert('Error setting prompt: ' + err.message);
+                    alert('提示词输入过程中出现如下错误：' + err.message);
                 }
             }
             e.target.value = '';
@@ -861,38 +846,32 @@
         });
     }
 
-    // 初始化主函数
     async function initialize() {
-        debug.log('Initializing...');
+        debug.log('正在初始化...');
         try {
-            const currentSite = getCurrentSite();
-            if(!currentSite) {
-                debug.error('Unsupported site');
-                return;
+            const savedSyncConfig = GM_getValue('syncConfig');
+            if (savedSyncConfig) {
+                CONFIG.sync = { ...CONFIG.sync, ...savedSyncConfig };
             }
-            
+            const currentSite = getCurrentSite();
             savedPrompts = loadPrompts();
-            
             const siteConfig = Object.values(CONFIG.sites).find(s => s.id === currentSite);
             if (!siteConfig) {
-                debug.error('Site configuration not found for current site');
+                debug.error('缺少当前站点的相关配置');
                 return;
             }
             const editorSelector = siteConfig.selector;
-            
             try {
                 await waitForElement(editorSelector);
-                debug.log('Editor element found');
+                debug.log('页面上存在与配置匹配的文本编辑器元素');
             } catch(err) {
-                debug.error('Editor element not found:', err);
+                debug.error('找不到与配置匹配的文本编辑器元素:', err);
                 return;
             }
-            
             initializeUI();
-            
-            debug.log('Initialization complete');
+            debug.log('初始化完成');
         } catch (error) {
-            debug.error('Initialization failed:', error);
+            debug.error('初始化过程中发生错误：', error);
         }
     }
 
