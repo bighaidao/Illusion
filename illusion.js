@@ -2,7 +2,7 @@
 // @name         幻觉（Illusion）
 // @icon         https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/icons/illusion.png
 // @namespace    https://github.com/cattail-mutt
-// @version      1.3
+// @version      1.4
 // @description  幻觉（Illusion）是一个精简的跨平台 Prompts 管理工具，支持在以下 AI 平台使用：Google AI Studio, OpenAI ChatGPT, Anthropic Claude 和 DeepSeek Chat。
 // @author       Mukai
 // @license      MIT
@@ -146,7 +146,7 @@
                 id: 'gemini',
                 icon: 'https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg',
                 buttonSize: '48px',
-                selector: 'textarea[aria-label="Type something"]',
+                selector: 'ms-autosize-textarea textarea',
                 setPrompt: updateTextArea
             },
             DEEPSEEK: {
@@ -330,6 +330,10 @@
     }
 
     function initializeUI() {
+        if (!document.body) {
+            console.error('文档 body 不存在');
+            return;
+        }
         loadExternalCSS();
         applyThemeVariables();
         const button = createButton();
