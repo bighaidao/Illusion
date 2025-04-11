@@ -331,7 +331,8 @@
 
     function initializeUI() {
         if (!document.body) {
-            console.error('文档 body 不存在');
+            console.error('找不到 <body>');
+            setTimeout(initializeUI, 100);
             return;
         }
         loadExternalCSS();
