@@ -5,7 +5,7 @@ thinking: |
   <!-- Please think step-by-step -->
 
 thinking_xml: |
-  <!-- Think within <thinking> before output. Finally, output within <output>. -->
+  <!-- Think within <thinking> before output -->
 
 code: |
     ```
