@@ -2,7 +2,7 @@
 // @name         幻觉（Illusion）
 // @icon         https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/icons/illusion.png
 // @namespace    https://github.com/cattail-mutt
-// @version      1.3
+// @version      1.4
 // @description  幻觉（Illusion）是一个精简的跨平台 Prompts 管理工具，支持在以下 AI 平台使用：Google AI Studio, OpenAI ChatGPT, Anthropic Claude 和 DeepSeek Chat。
 // @author       Mukai
 // @license      MIT
