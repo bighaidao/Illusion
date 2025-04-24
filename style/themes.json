@@ -61,12 +61,12 @@
         "border": "rgba(73, 72, 71, 1.00)",
         "button": {
             "bg": "rgb(248, 247, 246)",
-            "hover": rgb(243, 243, 241)
+            "hover": "rgb(243, 243, 241)"
         },
         "panel": {
             "bg": "rgb(248, 247, 246)",
             "buttonBg": "rgb(248, 247, 246)",
-            "buttonHover": rgb(243, 243, 241)
+            "buttonHover": "rgb(243, 243, 241)"
         }
     },
     "default": {
