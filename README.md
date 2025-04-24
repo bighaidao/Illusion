@@ -1,99 +1,83 @@
+- [Illusion](#illusion)
+  - [使用场景](#使用场景)
+  - [支持的平台](#支持的平台)
+  - [安装说明](#安装说明)
+  - [使用指南](#使用指南)
+    - [基本操作](#基本操作)
+  - [常见问题](#常见问题)
+- [Illusion Mini](#illusion-mini)
+
 # Illusion
-幻觉（Illusion）是一个精简的跨平台提示词管理工具，支持在以下 AI 平台使用：Google AI Studio, OpenAI ChatGPT, Anthropic Claude 和 DeepSeek Chat。
+Illusion 是一个精简的跨平台提示词管理工具，支持在 Google AI Studio、OpenAI ChatGPT、Anthropic Claude, DeepSeek Chat 和 Grok 等 AI 平台上使用。
+它帮助用户高效管理和复用提示词，替代手动输入或平台内置的自定义指令功能。
 
 ## 使用场景
-1. **长文本结构化**
-> 我习惯一次发送带有多个代码文件或组成部分的提示词，但不喜欢手动敲反引号、XML标签或换行。
+1. **取代机械输入、提升效率**
+> 我习惯一次发送带有多个代码文件或组成部分的提示词，但来回手动敲 XML标签、注释符号，或 "请以中文为主要主要组织回复" 真的很累。
 
-2. **缺少自定义指令的对话窗口**
-> 我使用的是 DeepSeek Chat 网页，这儿没有 Project, 常用的提示词的利用有些不方便。
->
-> 又或者像 DeepSeek 官方所推荐的，我想用 提示词模板 + 模板变量 构成的复杂提示词来获得更加令人满意的响应。
-
-3. **替代 ChatGPT Project Instructions**
-> 我有经常重复使用的 Prompt 和 ChatGPT 订阅。ChatGPT Project 非推理模型对项目的指令服从性很差。
+2. **替代 Project/Customized Instruction**
+> 我有复用率很高的提示词和 ChatGPT 订阅，可是我发现 ChatGPT Project 的非推理模型对项目的指令服从性比较差。
 >
 > 暂且不谈它的检索效果，光是遗忘指令这一条，就让它的整体表现远不如 Claude Project。所以，我正在寻找一个替代的解决方案。
+> 
+> 我使用的是 DeepSeek Chat 网页，这儿没有 Project, 常用的提示词的利用有些不方便。而且我想像 DeepSeek 官方所推荐的那样，用将复用的指令和输入构成的复杂的提示词，发送给模型，从而在某些模型身上得到比自定义指令、系统提示词下的对话更加令人满意的结果。
 
-## 功能概述
+## 支持的平台
 - Google AI Studio
 - OpenAI ChatGPT
 - Anthropic Claude
 - DeepSeek Chat
-
-主要功能包括：
-1. **提示词库管理**
-   - 创建、编辑、删除自定义提示词
-   - 快速查找和使用（输入）已保存的提示词
-
-2. **跨平台支持**
-   - 自动识别当前使用的 AI 平台
-   - 统一的操作界面和体验
-   - 适配多个平台的提示词输入方式
-
-3. **自动同步上游提示词库**
-   - 自动同步 "@resource     PROMPTS" 所指向的 YAML 提示词库文件
-   - 增加自动同步黑名单功能
+- Grok
 
 ## 安装说明
-1. 确保已安装用户脚本管理器（如 Tampermonkey 或脚本猫）
-2. 访问 Greasy Fork 上的 Illusion 脚本页面（本页面）
-3. 点击 "安装" 按钮
-4. 确认安装并启用脚本
+1. 安装用户脚本管理器（如 Tampermonkey 或脚本猫）。
+2. 访问 Greasy Fork 上的 [Illusion](https://greasyfork.org/zh-CN/scripts/527451-%E5%B9%BB%E8%A7%89-illusion) 脚本页面。
+3. 点击“安装”按钮并确认启用脚本。
 
 ## 使用指南
 ### 基本操作
-1. **访问支持的平台**
-   - 打开任一支持的平台（AI Studio、ChatGPT、Claude 或 DeepSeek Chat）
-   - 页面右下份会出现 Illusion 的图标
+1. **访问支持的平台**  
+   打开任一支持的 AI 平台，页面右下角会出现 Illusion 图标。
 
-2. **打开控制面板**
-   - 点击图标打开控制面板
-   - 面板包含以下主要功能：
-     - 提示词搜索与选择
-     - 提示词管理与新增
+2. **打开控制面板**  
+   点击图标，弹出包含提示词搜索、选择和管理功能的面板。
 
-3. **快速输入提示词**
-   - 在搜索框中输入或选择提示词
-   - 选中的提示词会自动插入到当前平台的输入框中
+3. **快速输入提示词**  
+   在搜索框中输入或选择提示词，选中的提示词会自动插入到平台的输入框中。
 
-4. **记录新的提示词**
-   - 点击 "New Prompt" 按钮
-   - 填写 Prompt ID 和内容
-   - 保存后即可使用
+4. **记录新提示词**  
+   点击“New”按钮，填写 Prompt ID 和内容后保存。
 
-5. **管理 Prompts**
-   - 点击 "Manage" 按钮
-   - 查看所有已保存的提示词
-   - 支持编辑和删除操作
-
-6. **自定义主题**
-   - 支持通过修改脚本中的 Github 直链及其对应的 THEMES.json 文件自定义样式
-   - 支持自定义以下元素：按钮颜色、面板背景、文字颜色、边框样式等
-
-7. **自动同步**
-   - 支持自定义同步提示词源
-   - 支持同步黑名单功能（根据键名过滤）
-   - 实现方式：搜索"是否与仓库中的 prompts.yaml 自动同步"，在 "CONFIG" 配置中直接修改相关配置即可。
+5. **管理提示词**  
+   点击“Manage”按钮，可查看、编辑或删除已保存的提示词。
 
 ## 常见问题
 ### 1. 脚本不工作怎么办？
-   - 检查是否安装了用户脚本管理器，确认脚本已启用，刷新页面后重试
-   - 右键 → 检查 → 控制台 / Console 寻找 Illusion 相关的日志和错误信息，然后前往提交[issue](https://github.com/cattail-mutt/Illusion/issues)
-
-### 2. Prompts 数据会丢失吗？
-   - 数据存储在本地，除非本地存储空间已满，否则不会自动清除
-   - 如果您的 prompts 库数量庞大或是投入了大量心血，建议不定期导出备份
+- 确认已安装用户脚本管理器并启用脚本。
+- 刷新页面，打开开发者工具（右键 → 检查 → 控制台），查看错误信息。
+- 如需帮助，可提交 [GitHub Issue](https://github.com/cattail-mutt/Illusion/issues) 或 [Greasy Fork 反馈](https://greasyfork.org/zh-CN/scripts/527451-%E5%B9%BB%E8%A7%89-illusion/feedback)。
+### 2. 提示词数据会丢失吗？
+- 数据存储在本地，通常不会丢失，除非存储空间满或脚本被删除。
+- 如果您的提示词"数据体量"较大，或是投入了大量心血，建议不定期导出备份，以防万一。
 
 ### 3. 如何反馈问题或建议？
-   - 提交[issue](https://github.com/cattail-mutt/Illusion/issues)
+- 提出 [GitHub Issues](https://github.com/cattail-mutt/Illusion/issues)
+- 通过 [Greasy Fork 反馈](https://greasyfork.org/zh-CN/scripts/527451-%E5%B9%BB%E8%A7%89-illusion/feedback) 
 
 ## 界面预览
-- 适配 Claude, ChatGPT, DeepSeek, Grok 的浅色主题
-- 适配 Google AI Studio 的深色主题
-  
-![claude.ai](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/claude.png)
-![chatgpt.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/chatgpt.png)
 ![aistudio.google.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/aistudio.png)
+![chatgpt.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/chatgpt.png)
+![claude.ai](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/claude.png)
 ![chat.deepseek.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/deepseek.png)
 ![grok.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/grok.png)
+
+# Illusion Mini
+Illusion Mini 是 Illusion 的轻量版，支持相同平台，但更适合偏好自定义配置的用户。
+
+> Illusion Mini 提供与 Illusion 相同的平台支持，但其功能设计更为精简。
+> 
+> 目前，用户需要根据自身的提示词列表手动创建并维护 JSON 文件，以实现个性化配置。
+>
+> Illusion Mini 的核心特性是 **提示词候选** 功能。通过键入触发字符（默认为 '￥'），用户可以激活提示词建议列表，从而简化操作、快速搜索和选择提示词。
+>
+> Illusion Mini 去除了 UI 组件并对 CSS 样式进行了简化，还在 TextArea 和 富文本编辑器 的基础上新增了将内容复制到剪贴板的回退机制，自定义配置更加灵活和方便。
