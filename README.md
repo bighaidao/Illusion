@@ -89,10 +89,11 @@
    - 提交[issue](https://github.com/cattail-mutt/Illusion/issues)
 
 ## 界面预览
-- 适配 Claude, ChatGPT, DeepSeek 的浅色主题
+- 适配 Claude, ChatGPT, DeepSeek, Grok 的浅色主题
 - 适配 Google AI Studio 的深色主题
   
-![claude.ai](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/images/claude.png)
-![chatgpt.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/images/chatgpt.png)
-![aistudio.google.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/images/aistudio.png)
-![chat.deepseek.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/images/deepseek.png)
+![claude.ai](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/claude.png)
+![chatgpt.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/chatgpt.png)
+![aistudio.google.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/aistudio.png)
+![chat.deepseek.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/deepseek.png)
+![grok.com](https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/example/grok.png)

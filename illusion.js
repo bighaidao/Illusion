@@ -1,22 +1,22 @@
 // ==UserScript==
-// @name         幻觉（Illusion）
-// @icon         https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/icons/illusion.png
+// @name         Illusion
+// @icon         https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/icons/illusion.png
 // @namespace    https://github.com/cattail-mutt
-// @version      1.4
-// @description  幻觉（Illusion）是一个精简的跨平台 Prompts 管理工具，支持在以下 AI 平台使用：Google AI Studio, OpenAI ChatGPT, Anthropic Claude 和 DeepSeek Chat。
+// @version      1.5
+// @description  Illusion（幻觉）是一个跨平台 Prompts 管理工具，支持在以下平台使用：Google AI Studio, ChatGPT, Claude, Grok 和 DeepSeek
 // @author       Mukai
 // @license      MIT
 // @match        https://aistudio.google.com/*
 // @match        https://chatgpt.com/*
 // @match        https://claude.ai/*
 // @match        https://chat.deepseek.com/*
+// @match        https://grok.com/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_getResourceText
-// @resource     PROMPTS https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/config/prompts.yaml
-// @resource     THEMES https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/config/themes.json
-// @resource     CSS https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/styles/illusion.css
-// @require      https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js
+// @resource     PROMPTS https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/prompt/prompts.json
+// @resource     THEMES https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/style/themes.json
+// @resource     CSS https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/styles/illusion.css
 // @homepage     https://greasyfork.org/zh-CN/scripts/527451-%E5%B9%BB%E8%A7%89-illusion
 // @downloadURL https://update.greasyfork.org/scripts/527451/%E5%B9%BB%E8%A7%89%EF%BC%88Illusion%EF%BC%89.user.js
 // @updateURL https://update.greasyfork.org/scripts/527451/%E5%B9%BB%E8%A7%89%EF%BC%88Illusion%EF%BC%89.meta.js
@@ -25,26 +25,25 @@
 (function() {
     'use strict';
 
+    const debug = {
+        enabled: true,
+        log: (...args) => debug.enabled && console.log('> Illusion 日志:', ...args),
+        error: (...args) => console.error('> Illusion 错误:', ...args)
+    };
+
     let modalRef = null;
     let overlayRef = null;
     let savedPrompts = {};
-    
-    window.onerror = function(msg, url, line, col, error) {
-        console.error('[Illusion]错误:', {msg, url, line, col, error});
-        return false;
-    };
-    
-    const debug = {
-        enabled: true,
-        log: (...args) => debug.enabled && console.log('[Illusion]日志:', ...args),
-        error: (...args) => console.error('[Illusion]错误:', ...args),
-        warn: (...args) => console.warn('[Illusion]警告:', ...args),
-        trace: (...args) => debug.enabled && console.trace('[Illusion]追踪:', ...args)
-    };
 
-    const initialPrompts = jsyaml.load(GM_getResourceText('PROMPTS'));
+    const initialPrompts = JSON.parse(GM_getResourceText('PROMPTS'));
+    const promptsObject = Object.fromEntries(
+    (initialPrompts || [])
+            .filter(item => item?.id && item?.value)
+            .map(item => [item.id, item.value])
+    );
+    console.log('PROMPTS解析结果:', promptsObject);
+
     const THEMECONFIG = JSON.parse(GM_getResourceText('THEMES'));
-    debug.log('PROMPTS解析结果:', initialPrompts);
     debug.log('THEMES解析结果:', THEMECONFIG);
 
     function dispatchEvents(element, events) {
@@ -56,7 +55,6 @@
         });
     }
 
-    // ChatGPT 和 Claude 均使用了 ProseMirror 库构建富文本编辑器
     function createParagraph(line) {
         const p = document.createElement('p');
         if (line.trim()) {
@@ -67,7 +65,7 @@
         return p;
     }
 
-    const updateProseMirror = (editor, prompt) => {
+    const updateProseMirror = (editor, prompt) => {  // ChatGPT 和 Claude 均使用了 ProseMirror 库构建富文本编辑器
         const paragraphs = Array.from(editor.querySelectorAll('p'));
         let currentContent = '';
         paragraphs.forEach(p => {
@@ -100,9 +98,7 @@
         dispatchEvents(editor, ['input', 'change']);
     };
 
-    // Gemini 和 DeepSeek 使用的均是纯文本输入框 <textarea>
-    // DeepSeek 不支持对 textarea.value 直接更新
-    const updateTextArea = async (textarea, prompt) => {
+    const updateTextArea = async (textarea, prompt) => {  // Gemini 和 DeepSeek 使用的均是纯文本输入框 <textarea>
         const currentContent = textarea.value;
         const newContent = currentContent === '' 
             ? prompt 
@@ -116,31 +112,34 @@
     };
 
     const CONFIG = {
-        debugEnabled: true,
         maxRetries: 3,
         retryDelay: 1000,
         initTimeout: 10000,
-        eventDelay: 50,
-        eventTimeout: 1000,
         sync: {
-            enabled: true,  // 是否与仓库中的 prompts.yaml 自动同步
-            blacklist: ['undesired_prompt,e.g. dev', 'undesired_prompt,e.g. graphviz']  // 同步黑名单[键名]，这些键名对应的提示词将不会被同步
+            enabled: true,  // 是否同步仓库中的 prompts.yaml
+            blacklist: ['undesired_prompt,e.g. dev', 'undesired_prompt,e.g. graphviz']  // 同步黑名单，其中的键名对应的提示词将不会被同步
         },
         sites: {
             CHATGPT: {
                 id: 'chatgpt',
-                icon: 'https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/icons/chatgpt.svg',
+                icon: 'https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/icons/chatgpt.svg',
                 buttonSize: '48px',
                 selector: 'div.ProseMirror[contenteditable=true]',
                 setPrompt: updateProseMirror
             },
-            CLAUDE: {
+            CLAUDE: {  // CSP 限制：用 svg 塞图标
                 id: 'claude',
-                // 由于 claude.ai 的 CSP 限制，用 svg 塞入图标
                 icon: `<svg xmlns="http://www.w3.org/2000/svg" style="flex:none;line-height:1" viewBox="0 0 24 24"><title>Claude</title><path d="M4.709 15.955l4.72-2.647.08-.23-.08-.128H9.2l-.79-.048-2.698-.073-2.339-.097-2.266-.122-.571-.121L0 11.784l.055-.352.48-.321.686.06 1.52.103 2.278.158 1.652.097 2.449.255h.389l.055-.157-.134-.098-.103-.097-2.358-1.596-2.552-1.688-1.336-.972-.724-.491-.364-.462-.158-1.008.656-.722.881.06.225.061.893.686 1.908 1.476 2.491 1.833.365.304.145-.103.019-.073-.164-.274-1.355-2.446-1.446-2.49-.644-1.032-.17-.619a2.97 2.97 0 01-.104-.729L6.283.134 6.696 0l.996.134.42.364.62 1.414 1.002 2.229 1.555 3.03.456.898.243.832.091.255h.158V9.01l.128-1.706.237-2.095.23-2.695.08-.76.376-.91.747-.492.584.28.48.685-.067.444-.286 1.851-.559 2.903-.364 1.942h.212l.243-.242.985-1.306 1.652-2.064.73-.82.85-.904.547-.431h1.033l.76 1.129-.34 1.166-1.064 1.347-.881 1.142-1.264 1.7-.79 1.36.073.11.188-.02 2.856-.606 1.543-.28 1.841-.315.833.388.091.395-.328.807-1.969.486-2.309.462-3.439.813-.042.03.049.061 1.549.146.662.036h1.622l3.02.225.79.522.474.638-.079.485-1.215.62-1.64-.389-3.829-.91-1.312-.329h-.182v.11l1.093 1.068 2.006 1.81 2.509 2.33.127.578-.322.455-.34-.049-2.205-1.657-.851-.747-1.926-1.62h-.128v.17l.444.649 2.345 3.521.122 1.08-.17.353-.608.213-.668-.122-1.374-1.925-1.415-2.167-1.143-1.943-.14.08-.674 7.254-.316.37-.729.28-.607-.461-.322-.747.322-1.476.389-1.924.315-1.53.286-1.9.17-.632-.012-.042-.14.018-1.434 1.967-2.18 2.945-1.726 1.845-.414.164-.717-.37.067-.662.401-.589 2.388-3.036 1.44-1.882.93-1.086-.006-.158h-.055L4.132 18.56l-1.13.146-.487-.456.061-.746.231-.243 1.908-1.312-.006.006z" fill="#D97757" fill-rule="nonzero"/></svg>`,
                 buttonSize: '48px',
                 selector: 'div.ProseMirror[contenteditable=true]',
                 setPrompt: updateProseMirror
+            },
+            DEEPSEEK: {
+                id: 'deepseek',
+                icon: 'https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/icons/deepseek.svg',
+                buttonSize: '48px',
+                selector: 'textarea[id="chat-input"]',
+                setPrompt: updateTextArea
             },
             GEMINI: {
                 id: 'gemini',
@@ -149,11 +148,12 @@
                 selector: 'ms-autosize-textarea textarea',
                 setPrompt: updateTextArea
             },
-            DEEPSEEK: {
-                id: 'deepseek',
-                icon: 'https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/resources/icons/deepseek.svg',
+            
+            GROK: {  // CSP 限制：用 svg 塞图标
+                id: 'grok',
+                icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" fill-rule="evenodd" viewBox="0 0 24 24"><title>Grok</title><path d="M9.27 15.29l7.978-5.897c.391-.29.95-.177 1.137.272.98 2.369.542 5.215-1.41 7.169-1.951 1.954-4.667 2.382-7.149 1.406l-2.711 1.257c3.889 2.661 8.611 2.003 11.562-.953 2.341-2.344 3.066-5.539 2.388-8.42l.006.007c-.983-4.232.242-5.924 2.75-9.383.06-.082.12-.164.179-.248l-3.301 3.305v-.01L9.267 15.292M7.623 16.723c-2.792-2.67-2.31-6.801.071-9.184 1.761-1.763 4.647-2.483 7.166-1.425l2.705-1.25a7.808 7.808 0 00-1.829-1A8.975 8.975 0 005.984 5.83c-2.533 2.536-3.33 6.436-1.962 9.764 1.022 2.487-.653 4.246-2.34 6.022-.599.63-1.199 1.259-1.682 1.925l7.62-6.815"/></svg>',
                 buttonSize: '48px',
-                selector: 'textarea[id="chat-input"]',
+                selector: 'textarea',
                 setPrompt: updateTextArea
             }
         }
@@ -165,20 +165,20 @@
         document.head.appendChild(style);
     }
 
-    function applyThemeVariables() {
+    function loadsiteTheme() {
         const currentSite = getCurrentSite();
         const theme = THEMECONFIG[currentSite];
         const config = Object.values(CONFIG.sites).find(s => s.id === currentSite);
         const root = document.documentElement;
-        root.style.setProperty('--button-size', config.buttonSize);
-        root.style.setProperty('--button-bg', theme.button.bg);
+        root.style.setProperty('--secondary-bg', theme.secondary);
+        root.style.setProperty('--text-color', theme.text);
         root.style.setProperty('--border-color', theme.border);
+        root.style.setProperty('--button-bg', theme.button.bg);
         root.style.setProperty('--button-hover', theme.button.hover);
+        root.style.setProperty('--button-size', config.buttonSize);
         root.style.setProperty('--panel-bg', theme.panel.bg);
         root.style.setProperty('--panel-button-bg', theme.panel.buttonBg);
         root.style.setProperty('--panel-button-hover', theme.panel.buttonHover);
-        root.style.setProperty('--text-color', theme.text);
-        root.style.setProperty('--secondary-bg', theme.secondary);
     }
 
     function waitForElement(selector, maxTimeout = CONFIG.initTimeout) {
@@ -213,6 +213,7 @@
         if(url.includes('chatgpt.com')) return CONFIG.sites.CHATGPT.id;
         if(url.includes('claude.ai')) return CONFIG.sites.CLAUDE.id;
         if(url.includes('chat.deepseek.com')) return CONFIG.sites.DEEPSEEK.id;
+        if(url.includes('grok.com')) return CONFIG.sites.GROK.id;
     }
 
     function createElement(tag, attributes = {}) {
@@ -254,13 +255,13 @@
         return filteredPrompts;
     }
 
-    function syncPrompts(storedPrompts, initialPrompts) {
+    function syncPrompts(storedPrompts, initialPromptsObject) {
         if (!CONFIG.sync.enabled) {
             debug.log('提示词同步功能已禁用');
             return storedPrompts;
         }
         debug.log('提示词库同步中...');
-        const filteredInitialPrompts = filterPromptsByBlacklist(initialPrompts);
+        const filteredInitialPrompts = filterPromptsByBlacklist(initialPromptsObject);
         let hasNewPrompts = false;
         const syncedPrompts = { ...storedPrompts };
         for (const [id, content] of Object.entries(filteredInitialPrompts)) {
@@ -283,13 +284,13 @@
         debug.log('正在载入提示词...');
         const storedPrompts = GM_getValue('prompts');
         if (!storedPrompts) {
-            const filteredPrompts = filterPromptsByBlacklist(initialPrompts);
+            const filteredPrompts = filterPromptsByBlacklist(promptsObject);
             savedPrompts = filteredPrompts;
             debug.log('未发现 GM 存储中的提示词，将使用初始化时加载的默认提示词:', savedPrompts);
             GM_setValue('prompts', savedPrompts);
         } else {
             debug.log('发现 GM 存储中已有提示词如下', storedPrompts);
-            savedPrompts = syncPrompts(storedPrompts, initialPrompts);
+            savedPrompts = syncPrompts(storedPrompts, promptsObject);
         }
         return savedPrompts;
     }
@@ -336,7 +337,7 @@
             return;
         }
         loadExternalCSS();
-        applyThemeVariables();
+        loadsiteTheme();
         const button = createButton();
         const panel = createPanel();
         const { modal, overlay } = createModal();
@@ -411,7 +412,7 @@
         });
         const newButton = createElement('button', {
             className: 'panel-button',
-            textContent: 'New Prompt',
+            textContent: 'New',
             'data-action': 'new',
             onclick: () => {
                 const modal = document.querySelector('.modal');
@@ -771,7 +772,6 @@
         debug.log('最新的提示词列表:', savedPrompts);
         datalist.textContent = '';
         Object.keys(savedPrompts).forEach(id => {
-            debug.log('可用提示词:', id);
             const option = createElement('option', { value: id });
             datalist.appendChild(option);
         });
