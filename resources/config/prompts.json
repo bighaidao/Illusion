@@ -1,0 +1,18 @@
+[
+    {
+        "id": "check_text",
+        "value": "Follow these steps: \n1. Identify text containing spelling or grammar mistakes. \n2. Identify ambiguous or wordy expressions. \n3. Identify expressions lacking fluency or flow. \n4. Suggest specific revisions\n\n <!-- Attention: Examine sentence by sentence. Replies should be primarily in Chinese. -->"
+    },
+    {
+        "id": "reply_in_zh",
+        "value": "<!-- Replies should be primarily in Chinese. -->"
+    },
+    {
+        "id": "codeblock",
+        "value": "```\n\n```"
+    },
+    {
+        "id": "xml_tag",
+        "value": "<>\n\n</>"
+    }
+]
