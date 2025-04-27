@@ -16,7 +16,7 @@
 // @grant        GM_getResourceText
 // @resource     PROMPTS https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/prompt/prompts.json
 // @resource     THEMES https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/style/themes.json
-// @resource     CSS https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/styles/illusion.css
+// @resource     CSS https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/style/illusion.css
 // @homepage     https://greasyfork.org/zh-CN/scripts/527451-%E5%B9%BB%E8%A7%89-illusion
 // @downloadURL https://update.greasyfork.org/scripts/527451/%E5%B9%BB%E8%A7%89%EF%BC%88Illusion%EF%BC%89.user.js
 // @updateURL https://update.greasyfork.org/scripts/527451/%E5%B9%BB%E8%A7%89%EF%BC%88Illusion%EF%BC%89.meta.js
