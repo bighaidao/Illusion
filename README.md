@@ -1,4 +1,10 @@
+# Illusion
+Illusion 是一个精简的跨平台提示词管理工具，支持在 Google AI Studio、OpenAI ChatGPT、Anthropic Claude, DeepSeek Chat 和 Grok 等 AI 平台上使用。
+它帮助用户高效管理和复用提示词，替代手动输入或平台内置的自定义指令功能。
+
+## 目录
 - [Illusion](#illusion)
+  - [目录](#目录)
   - [使用场景](#使用场景)
   - [支持的平台](#支持的平台)
   - [安装说明](#安装说明)
@@ -6,10 +12,6 @@
     - [基本操作](#基本操作)
   - [常见问题](#常见问题)
 - [Illusion Mini](#illusion-mini)
-
-# Illusion
-Illusion 是一个精简的跨平台提示词管理工具，支持在 Google AI Studio、OpenAI ChatGPT、Anthropic Claude, DeepSeek Chat 和 Grok 等 AI 平台上使用。
-它帮助用户高效管理和复用提示词，替代手动输入或平台内置的自定义指令功能。
 
 ## 使用场景
 1. **取代机械输入、提升效率**
