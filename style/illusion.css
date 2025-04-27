@@ -11,10 +11,9 @@
     justify-content: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     z-index: 10000;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, left 0.1s linear, top 0.1s linear;
     user-select: none;
     touch-action: none;
-    transition: left 0.1s linear, top 0.1s linear;
 }
 
 .illusion-button.docked {
@@ -40,16 +39,22 @@
     background: var(--panel-bg);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.95);
     z-index: 10000;
     font-family: system-ui, -apple-system, sans-serif;
     padding: 16px;
     color: var(--text-color);
     border: 1px solid var(--border-color);
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out, visibility 0s linear 0.2s;
 }
 
 .illusion-panel.visible {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    transition-delay: 0s;
 }
 
 .panel-title {
@@ -88,19 +93,22 @@
     right: 0;
     bottom: 0;
     background: rgba(0,0,0,0.7);
-    display: none;
+    opacity: 0;
+    visibility: hidden;
     z-index: 10000;
+    transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
 }
 
 .modal {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
     background: var(--panel-bg);
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -50%) scale(0.95);
     z-index: 10001;
     min-width: 400px;
     max-width: 90%;
@@ -108,11 +116,18 @@
     overflow-y: auto;
     border: 1px solid var(--border-color);
     color: var(--text-color);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0s linear 0.3s;
 }
 
 .modal.visible,
 .modal-overlay.visible {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.modal.visible {
+    transform: translate(-50%, -50%) scale(1);
 }
 
 .modal-header {
@@ -123,6 +138,8 @@
 
 .modal-content {
     padding: 16px;
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
 }
 
 .modal-footer {
@@ -141,31 +158,39 @@
     display: block;
     margin-bottom: 8px;
     color: var(--text-color);
+    font-weight: 500;
 }
 
 .form-input,
 .form-textarea {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 6px;
     margin-bottom: 8px;
     background: var(--secondary-bg);
     color: var(--text-color);
+    box-sizing: border-box;
+    font-size: 14px;
 }
 
 .form-textarea {
-    min-height: 200px;
+    min-height: 150px;
     resize: vertical;
     font-family: monospace;
     line-height: 1.5;
     padding: 12px;
 }
 
+.form-input:focus,
 .form-textarea:focus {
     outline: none;
     border-color: var(--text-color);
-    box-shadow: 0 0 0 2px var(--border-color);
+    box-shadow: 0 0 0 2px rgba(var(--text-rgb, 51, 51, 51), 0.2);
+}
+
+:root {
+    --text-rgb: 51, 51, 51;
 }
 
 .input-group {
@@ -181,12 +206,13 @@
     background: var(--secondary-bg);
     color: var(--text-color);
     font-size: 14px;
+    box-sizing: border-box;
 }
 
 .prompt-input:focus {
     outline: none;
     border-color: var(--text-color);
-    box-shadow: 0 0 0 2px var(--border-color);
+    box-shadow: 0 0 0 2px rgba(var(--text-rgb, 51, 51, 51), 0.2);
 }
 
 datalist {
