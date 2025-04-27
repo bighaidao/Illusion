@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Illusion mini 111
+// @name         Illusion mini
 // @icon         https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/icons/illusion.png
 // @namespace    https://github.com/cattail-mutt
 // @version      mini
