@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Illusion mini
+// @name         Illusion mini 111
 // @icon         https://raw.githubusercontent.com/cattail-mutt/Illusion/refs/heads/main/image/icons/illusion.png
 // @namespace    https://github.com/cattail-mutt
 // @version      mini
@@ -12,6 +12,7 @@
 // @match        https://chat.deepseek.com/*
 // @match        https://grok.com/*
 // @match        https://gemini.google.com/*
+// @match        https://www.perplexity.ai/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_getResourceText
@@ -67,7 +68,7 @@
     // --- 配置日志 ---
     const debug = {
         enabled: true,
-		log: (...args) => debug.enabled && console.log('> Illusion 日志:', ...args),
+        log: (...args) => debug.enabled && console.log('> Illusion 日志:', ...args),
         error: (...args) => console.error('> Illusion 错误:', ...args)
     };
 
@@ -280,6 +281,11 @@
                 id: 'grok',
                 selector: 'textarea',
                 setPrompt: updateTextArea
+            },
+            pplx: {
+                id: 'pplx',
+                selector: 'textarea',
+                setPrompt: updateTextArea
             }
         }
     };
@@ -293,6 +299,7 @@
         if (url.includes('aistudio.google.com')) return 'gemini';
         if (url.includes('gemini.google.com')) return 'geminiApp';
         if (url.includes('grok.com')) return 'grok';
+        if (url.includes('perplexity.ai')) return 'pplx';
         return null;
     }
 
@@ -333,16 +340,16 @@
             .illusion-suggestion-list {
                 position: absolute;
                 z-index: 99999;
-                background-color: #fff;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                max-height: 200px;
+                background-color: #fefefe;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                max-height: 240px;
                 overflow-y: auto;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
                 min-width: 150px;
-                font-family: sans-serif;
-                font-size: 14px;
+                color: #333;
                 scrollbar-width: thin;
+                scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
             }
             .illusion-suggestion-item {
                 padding: 8px 12px;
@@ -351,6 +358,7 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                transition: background-color 0.15s ease-in-out;
             }
             .illusion-suggestion-item:hover {
                 background-color: #eee;
@@ -362,6 +370,8 @@
                 padding: 8px 12px;
                 color: #888;
                 cursor: default;
+                text-align: center;
+                background-color: transparent !important;
             }
             .illusion-suggestion-item:hover {
                 background-color: #eee;
