@@ -69,6 +69,20 @@
             "buttonHover": "rgb(243, 243, 241)"
         }
     },
+    "yuanbao": {
+        "secondary": "rgb(248, 247, 246)",
+        "text": "rgb(73, 72, 71)",
+        "border": "rgba(73, 72, 71, 1.00)",
+        "button": {
+            "bg": "rgb(248, 247, 246)",
+            "hover": "rgb(243, 243, 241)"
+        },
+        "panel": {
+            "bg": "rgb(248, 247, 246)",
+            "buttonBg": "rgb(248, 247, 246)",
+            "buttonHover": "rgb(243, 243, 241)"
+        }
+    },
     "default": {
         "secondary": "rgb(245, 245, 245)",
         "text": "rgb(51, 51, 51)",
