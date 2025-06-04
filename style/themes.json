@@ -87,6 +87,7 @@
         secondary: "#f5f7fa",
         text: "#1e293b",
         border: "#cbd5e1",
+        
         button: { bg: "#4285f4", hover: "#3367d6" },
         panel: { bg: "#ffffff", buttonBg: "#f8f9fa", buttonHover: "#e8eaed" }
     },
