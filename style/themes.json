@@ -83,7 +83,7 @@
             "buttonHover": "rgb(243, 243, 241)"
         }
     },
-    gemini_web: {
+    "gemini_web": {
        "secondary": "rgb(230, 228, 219)",
         "text": "rgb(83, 81, 70)",
         "border": "rgba(217, 119, 87, 0.2)",
@@ -98,7 +98,7 @@
         }
     },
     
-    genspark: {
+     "genspark": {
        "secondary": "rgb(230, 228, 219)",
         "text": "rgb(83, 81, 70)",
         "border": "rgba(217, 119, 87, 0.2)",
