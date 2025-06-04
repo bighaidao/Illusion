@@ -83,6 +83,21 @@
             "buttonHover": "rgb(243, 243, 241)"
         }
     },
+    gemini_web: {
+        secondary: "#f5f7fa",
+        text: "#1e293b",
+        border: "#cbd5e1",
+        button: { bg: "#4285f4", hover: "#3367d6" },
+        panel: { bg: "#ffffff", buttonBg: "#f8f9fa", buttonHover: "#e8eaed" }
+    },
+    
+    genspark: {
+        secondary: "#f0f4f8",
+        text: "#1a202c",
+        border: "#c1c9d2",
+        button: { bg: "#2d3748", hover: "#1a202c" },
+        panel: { bg: "#ffffff", buttonBg: "#edf2f7", buttonHover: "#e2e8f0" }
+    },
     "default": {
         "secondary": "rgb(245, 245, 245)",
         "text": "rgb(51, 51, 51)",
